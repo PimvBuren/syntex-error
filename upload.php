@@ -1,11 +1,14 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 require_once 'classes/classUpload.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-
-
 ?>
 <form action="upload.php" method="post" enctype="multipart/form-data">
   Select image to upload:
