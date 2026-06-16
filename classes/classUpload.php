@@ -1,27 +1,27 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+class FileUpload
+{
+    public function uploadFile(array $file): string
+    {
+        $targetDir = __DIR__ . '/../uploads/';
+        $targetFile = $targetDir . basename($file['name']);
+        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
+        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
 
-class file {
-    private $conn;
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            return 'Upload failed.';
+        }
 
-    public function __construct($conn) {
-        $this->conn = $conn;
+        if (!in_array($imageFileType, $allowedTypes)) {
+            return 'Only JPG, JPEG, PNG and GIF files are allowed.';
+        }
+
+        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+            return 'File uploaded successfully.';
+        }
+
+        return 'Could not save uploaded file.';
+    }
 }
-
-public function uploadFile($file) {
-$target_dir = "uploads/";
-$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-
-}
-}
-
-?>
-
-
-
-
-
-
