@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/classDatabase.php';
 
 class FileUpload
 {
@@ -8,8 +9,6 @@ class FileUpload
 
         $filename = basename($file['name']);
         $targetFile = $targetDir . $filename;
-         $targetFile = $targetDir . $filename;
-        $targetFile = $targetDir . basename($file['name']);
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
@@ -22,6 +21,11 @@ class FileUpload
             return 'Only JPG, JPEG, PNG and GIF files are allowed.';
         }
 
+        if ($file['size'] > 500000) {
+         return 'file to big';
+  
+} 
+
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
                         $database = new Database();
             $conn = $database->getConnection();
@@ -31,7 +35,7 @@ class FileUpload
             $fileHash = hash_file('sha256', $targetFile);
 
             $stmt = $conn->prepare(
-                "INSERT INTO files 
+                "INSERT INTO file 
                 (user_id, filename, file_type, file_size, file_hash, uploaded_at)
                 VALUES (?, ?, ?, ?, ?, NOW())"
             );
