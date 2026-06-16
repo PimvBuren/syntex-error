@@ -6,7 +6,7 @@ class Database {
     public function __construct() {
         $servername = "localhost";
         $username = "root";
-        $password = "root";
+        $password = "";
         $dbname = "syntax_error";
 
         try {
