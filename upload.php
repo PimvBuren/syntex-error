@@ -12,7 +12,7 @@ ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileToUpload'])) {
     $upload = new FileUpload();
-    $message = $upload->uploadFile($_FILES['fileToUpload']);
+    $message = $upload->uploadFile($_FILES['fileToUpload'], $_SESSION['user_id']);
 }
 
 ?>
