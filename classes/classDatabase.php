@@ -7,7 +7,7 @@ class Database {
         $servername = "localhost";
         $username = "root";
         $password = "";
-        $dbname = "syntax_error";
+        $dbname = "syntax error";
 
         try {
             $this->conn = new PDO(
