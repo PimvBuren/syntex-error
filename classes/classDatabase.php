@@ -6,8 +6,8 @@ class Database {
     public function __construct() {
         $servername = "localhost";
         $username = "root";
-        $password = "";
-        $dbname = "syntax error";
+        $password = "root";
+        $dbname = "syntax_error";
 
         try {
             $this->conn = new PDO(

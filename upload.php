@@ -10,28 +10,16 @@ require_once 'classes/classUpload.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+$message = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileToUpload'])) {
     $upload = new FileUpload();
     $message = $upload->uploadFile($_FILES['fileToUpload'], $_SESSION['user_id']);
+    // Stuur terug naar index na upload
+    header("Location: index.php");
+    exit;
 }
 
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-  Select image to upload:
-  <input type="file" name="fileToUpload" id="fileToUpload">
-  <input type="submit" value="Upload Image" name="submit">
-</form>
-
-</body>
-</html>
-
-
+// Als iemand direct naar upload.php gaat zonder formulier, stuur terug
+header("Location: index.php");
+exit;
