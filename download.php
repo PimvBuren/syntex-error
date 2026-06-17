@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once 'classes/classDatabase.php';
+require_once __DIR__ . '/server/classes/classDatabase.php';
 
 $id = $_GET['id'] ?? null;
 
@@ -13,7 +13,7 @@ if (!$id || !is_numeric($id)) {
     die("Ongeldig verzoek.");
 }
 
-$db = new Database();
+$db   = new Database();
 $conn = $db->getConnection();
 
 // Controleer dat het bestand van de ingelogde gebruiker is
@@ -25,10 +25,10 @@ if (!$file) {
     die("Bestand niet gevonden of geen toegang.");
 }
 
-$path = __DIR__ . "/uploads/" . $file['filename'];
+$path = __DIR__ . '/server/uploads/' . $file['filename'];
 
 if (!file_exists($path)) {
-    die("Bestand bestaat niet op server.");
+    die("Bestand bestaat niet op de server.");
 }
 
 header('Content-Type: application/octet-stream');

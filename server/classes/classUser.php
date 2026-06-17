@@ -12,7 +12,6 @@ class User {
      * Geeft true terug bij succes, of een foutmelding als string.
      */
     public function register(string $username, string $email, string $password): true|string {
-        // Controleer of username of email al bestaat
         $stmt = $this->conn->prepare("SELECT user_id FROM user WHERE username = ? OR email = ?");
         $stmt->execute([$username, $email]);
 
@@ -21,18 +20,17 @@ class User {
         }
 
         $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-        $role_id = 1; // standaard rol
 
         $stmt = $this->conn->prepare(
-            "INSERT INTO user (role_id, username, email, password) VALUES (?, ?, ?, ?)"
+            "INSERT INTO user (role_id, username, email, password) VALUES (1, ?, ?, ?)"
         );
-        $stmt->execute([$role_id, $username, $email, $passwordHash]);
+        $stmt->execute([$username, $email, $passwordHash]);
 
         return true;
     }
 
     /**
-     * Log een gebruiker in op basis van gebruikersnaam en wachtwoord.
+     * Log een gebruiker in.
      * Geeft de user-array terug bij succes, of een foutmelding als string.
      */
     public function login(string $username, string $password): array|string {

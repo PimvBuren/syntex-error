@@ -5,7 +5,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once 'classes/classDatabase.php';
+require_once __DIR__ . '/server/classes/classDatabase.php';
 
 $db   = new Database();
 $conn = $db->getConnection();
@@ -14,7 +14,6 @@ $stmt = $conn->prepare("SELECT * FROM file WHERE user_id = ? ORDER BY uploaded_a
 $stmt->execute([$_SESSION['user_id']]);
 $files = $stmt->fetchAll();
 
-// Haal uploadmelding op uit sessie (gezet door upload.php)
 $uploadMessage = $_SESSION['upload_message'] ?? null;
 $uploadStatus  = $_SESSION['upload_status']  ?? null;
 unset($_SESSION['upload_message'], $_SESSION['upload_status']);
@@ -33,7 +32,7 @@ function formatBytes(int $bytes): string {
     <title>Syntax Error – Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="client/stylesheet.css">
 </head>
 <body>
 
@@ -53,7 +52,6 @@ function formatBytes(int $bytes): string {
         </div>
     <?php endif; ?>
 
-    <!-- Upload -->
     <div class="card">
         <h2>Bestand uploaden</h2>
         <form action="upload.php" method="post" enctype="multipart/form-data">
@@ -67,7 +65,6 @@ function formatBytes(int $bytes): string {
         </form>
     </div>
 
-    <!-- Bestandenlijst -->
     <div class="card">
         <h2>Jouw bestanden</h2>
 
@@ -91,12 +88,10 @@ function formatBytes(int $bytes): string {
                     <tr>
                         <td>
                             <img class="file-thumb"
-                                 src="uploads/<?= htmlspecialchars($file['filename']) ?>"
+                                 src="server/uploads/<?= htmlspecialchars($file['filename']) ?>"
                                  alt="preview">
                         </td>
-                        <td>
-                            <span class="file-name"><?= htmlspecialchars($file['filename']) ?></span>
-                        </td>
+                        <td><span class="file-name"><?= htmlspecialchars($file['filename']) ?></span></td>
                         <td class="file-meta"><?= formatBytes((int)$file['file_size']) ?></td>
                         <td class="file-meta"><?= htmlspecialchars($file['uploaded_at']) ?></td>
                         <td>
@@ -113,6 +108,6 @@ function formatBytes(int $bytes): string {
 
 </div>
 
-<script src="script.js"></script>
+<script src="client/script.js"></script>
 </body>
 </html>
