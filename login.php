@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $result = $userClass->register($username, $email, $password);
             if ($result === true) {
-                $success = "Account aangemaakt. Je kunt nu inloggen.";
+                $success = "Account aangemaakt! Je kunt nu inloggen.";
                 $mode = 'login';
             } else {
                 $error = $result;
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Syntax Error – <?= $mode === 'register' ? 'Registreren' : 'Inloggen' ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="client/stylesheet.css">
+    <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
 
@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if ($error): ?>
             <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
+
         <?php if ($success): ?>
             <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
@@ -116,5 +117,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </div>
 </div>
+
 </body>
 </html>

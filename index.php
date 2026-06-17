@@ -15,17 +15,17 @@ $stmt = $conn->prepare("SELECT * FROM file WHERE user_id = ? ORDER BY uploaded_a
 $stmt->execute([$_SESSION['user_id']]);
 $files = $stmt->fetchAll();
 
-// Haal uploadmelding op uit sessie
+// Uploadmelding uit sessie
 $uploadMessage = $_SESSION['upload_message'] ?? null;
 $uploadStatus  = $_SESSION['upload_status']  ?? null;
 unset($_SESSION['upload_message'], $_SESSION['upload_status']);
 
-// Veilige foutmeldingen van download.php - geen technische details
+// Veilige foutmeldingen van download.php
 $errorMessages = [
-    'ongeldig'    => 'Er is een ongeldig verzoek gedaan.',
-    'toegang'     => 'Je hebt geen toegang tot dit bestand.',
-    'nietgevonden'=> 'Het bestand kon niet worden gevonden.',
-    'integriteit' => 'Het bestand is aangepast of beschadigd en kan niet worden gedownload.',
+    'ongeldig'     => 'Er is een ongeldig verzoek gedaan.',
+    'toegang'      => 'Je hebt geen toegang tot dit bestand.',
+    'nietgevonden' => 'Het bestand kon niet worden gevonden.',
+    'integriteit'  => 'Het bestand is aangepast of beschadigd en kan niet worden gedownload.',
 ];
 $downloadError = isset($_GET['error']) ? ($errorMessages[$_GET['error']] ?? null) : null;
 
@@ -69,7 +69,6 @@ function formatBytes(int $bytes): string {
         </div>
     <?php endif; ?>
 
-    <!-- Upload -->
     <div class="card">
         <h2>Bestand uploaden</h2>
         <form action="upload.php" method="post" enctype="multipart/form-data">
@@ -83,7 +82,6 @@ function formatBytes(int $bytes): string {
         </form>
     </div>
 
-    <!-- Bestandenlijst -->
     <div class="card">
         <h2>Jouw bestanden</h2>
 

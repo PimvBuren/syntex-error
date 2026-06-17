@@ -7,6 +7,11 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once __DIR__ . '/server/classes/classUpload.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$message = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileToUpload'])) {
     $upload  = new FileUpload();
     $message = $upload->uploadFile($_FILES['fileToUpload'], $_SESSION['user_id']);
