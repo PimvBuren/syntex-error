@@ -6,18 +6,28 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/server/classes/classUpload.php';
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-$message = '';
+require_once __DIR__ . '/server/classes/classDatabase.php';
+require_once __DIR__ . '/server/classes/classLog.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileToUpload'])) {
+    $userKey = $_POST['encrypt_key'] ?? '';
+
     $upload  = new FileUpload();
-    $message = $upload->uploadFile($_FILES['fileToUpload'], $_SESSION['user_id']);
+    $message = $upload->uploadFile($_FILES['fileToUpload'], $_SESSION['user_id'], $userKey);
+
+    $db     = new Database();
+    $logger = new Log($db->getConnection());
+
+    $success = ($message === 'Bestand succesvol geüpload.');
+    $logger->log(
+        $success ? 'upload' : 'upload_failed',
+        $_SESSION['user_id'],
+        null,
+        $message . ' — ' . basename($_FILES['fileToUpload']['name'] ?? '')
+    );
 
     $_SESSION['upload_message'] = $message;
-    $_SESSION['upload_status']  = ($message === 'Bestand succesvol geüpload.') ? 'success' : 'error';
+    $_SESSION['upload_status']  = $success ? 'success' : 'error';
 }
 
 header("Location: index.php");

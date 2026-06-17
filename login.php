@@ -3,10 +3,12 @@ session_start();
 
 require_once __DIR__ . '/server/classes/classDatabase.php';
 require_once __DIR__ . '/server/classes/classUser.php';
+require_once __DIR__ . '/server/classes/classLog.php';
 
 $database  = new Database();
 $conn      = $database->getConnection();
 $userClass = new User($conn);
+$logger    = new Log($conn);
 
 $error   = '';
 $success = '';
@@ -27,6 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $result = $userClass->register($username, $email, $password);
             if ($result === true) {
+                // Log de registratie
+                $newUser = $conn->prepare("SELECT user_id FROM user WHERE username = ?");
+                $newUser->execute([$username]);
+                $newUserId = $newUser->fetchColumn();
+                $logger->log('register', $newUserId, null, "Nieuw account: $username");
+
                 $success = "Account aangemaakt! Je kunt nu inloggen.";
                 $mode = 'login';
             } else {
@@ -42,9 +50,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id']  = $result['user_id'];
                 $_SESSION['username'] = $result['username'];
                 $_SESSION['role_id']  = $result['role_id'];
+
+                // Log de login
+                $logger->log('login', $result['user_id'], null, "Ingelogd: $username");
+
                 header("Location: index.php");
                 exit;
             } else {
+                // Log mislukte loginpoging
+                $logger->log('login_failed', null, null, "Mislukte login voor: $username");
                 $error = $result;
             }
         }
@@ -72,7 +86,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if ($error): ?>
             <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
-
         <?php if ($success): ?>
             <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
         <?php endif; ?>
@@ -117,6 +130,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </div>
 </div>
-
 </body>
 </html>
