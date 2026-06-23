@@ -3,8 +3,9 @@
 define('DB_HOST',    'localhost');
 define('DB_NAME',    'syntax_error');
 define('DB_USER',    'root');
-define('DB_PASS',    'root');
+define('DB_PASS',    '');
 define('DB_CHARSET', 'utf8mb4');
+define('DB_PORT',    3307);
 
 // Upload
 define('UPLOAD_MAX_SIZE', 500000);                       // 500 KB
